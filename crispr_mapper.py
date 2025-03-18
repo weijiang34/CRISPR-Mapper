@@ -55,11 +55,14 @@ def main(mags_dir, virus_path, out_dir, threads, dependency_dir, ident_threshold
         pool.starmap(predict_crispr, [(mags_dir, mag_file, tmp_dir, dependency_dir) for mag_file in mag_files])
     # Merge all CRISPR spacers into a single file
     crispr_files = [f for f in os.listdir(tmp_dir) if f.endswith('_CRISPR_Spacer.fa')]
-    with open(all_spacer_file, 'w') as out_file:
-        for crispr_file in crispr_files:
-            with open(os.path.join(tmp_dir, crispr_file), 'r') as in_file:
-                out_file.write(in_file.read())
-                logging.info(f"Merged CRISPR spacers to {all_spacer_file}")
+    try: 
+        with open(all_spacer_file, 'w') as out_file:
+            for crispr_file in crispr_files:
+                with open(os.path.join(tmp_dir, crispr_file), 'r') as in_file:
+                    out_file.write(in_file.read())
+        logging.info(f"Merged CRISPR spacers to {all_spacer_file}")
+    except:
+        logging.error(f"Failed to merge CRISPR spacers to {all_spacer_file}")
                 
     # Rename the sequence headers to avoid BLAST errors
     logging.info(f"Renaming MAGs' names to avoid makeblastdb errors")
@@ -76,7 +79,7 @@ def main(mags_dir, virus_path, out_dir, threads, dependency_dir, ident_threshold
         logging.info(f"Creating BLAST database from {all_spacer_with_shortname_path}")
         makeblastdb(all_spacer_with_shortname_path, molecule_tpye, blastdb_dir)
         logging.info(f"Created BLAST database: {blastdb_dir}")
-        os.remove(all_spacer_with_shortname_path)
+        # os.remove(all_spacer_with_shortname_path)
     except:
         logging.error(f"Failed to create BLAST database from {all_spacer_with_shortname_path}")
     # Run BLASTn
@@ -91,7 +94,7 @@ def main(mags_dir, virus_path, out_dir, threads, dependency_dir, ident_threshold
     try:
         logging.info(f"Renaming MAGs' names back to the original names in the BLAST output")
         name_mapping_blastn_output(blast_out_path, blast_out_renamed_path, spacer_name_mapping_table_path, num_workers=threads, chunk_size=1000)
-        os.remove(blast_out_path)
+        # os.remove(blast_out_path)
     except:
         logging.error(f"Failed to rename the MAGs' names back to the original names in the BLAST output")
         

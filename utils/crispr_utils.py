@@ -1,6 +1,9 @@
 import os 
 import subprocess
 import logging
+from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 logging.basicConfig(
     level=logging.DEBUG, 
@@ -30,6 +33,7 @@ def parse_CRT(crispr_file, tmp_dir):
     bin_header = os.path.basename(crispr_file).split('.')[0]
     with open(os.path.join(tmp_dir, crispr_file), 'r') as in_file:
         lines = in_file.readlines()
+        crispr_rec = []
         spacers = []
         in_crispr_section = False
         in_sequence_section = False
@@ -57,18 +61,28 @@ def parse_CRT(crispr_file, tmp_dir):
                             spacer = line_list[3]
                             if spacer=='\n':
                                 continue
-                            spacers.append((cnt, spacer))
+                            if not str(spacer).isalpha():
+                                continue
+                            rec = SeqRecord(Seq(spacer), id=f'{bin_header}_spacer_{cnt}', description='')
+                            crispr_rec.append(rec)
+                            # spacers.append((cnt, spacer))
                             cnt += 1
                         except:
                             continue
-
-        with open(os.path.join(tmp_dir, f"{bin_header}_CRISPR_Spacer.fa"), 'w') as out_file:
-            for spacer in spacers:
-                # Create spacer ID and sequence
-                spacer_id = f"{bin_header}_spacer_{spacer[0]}"
-                spacer_seq = spacer[1]
-                out_file.write(f">{spacer_id}\n{spacer_seq}\n")
-            logging.info(f"""Parsed {len(spacers)} CRISPR spacers from {crispr_file}""")
+    # if crispr_rec:
+    SeqIO.write(crispr_rec, os.path.join(tmp_dir, f"{bin_header}_CRISPR_Spacer.fa"), 'fasta')
+    logging.info(f"""Parsed {len(crispr_rec)} CRISPR spacers from {crispr_file}""")
+    # else:
+    #     logging.info(f"""No CRISPR spacers from {crispr_file}""")
+        
+    # with open(os.path.join(tmp_dir, f"{bin_header}_CRISPR_Spacer.fa"), 'w') as out_file:
+    #     for spacer in spacers:
+    #         # Create spacer ID and sequence
+    #         spacer_id = f"{bin_header}_spacer_{spacer[0]}"
+    #         spacer_seq = spacer[1]
+            
+    #         out_file.write(f">{spacer_id}\n{spacer_seq}\n")
+    
                     
     return 
 
