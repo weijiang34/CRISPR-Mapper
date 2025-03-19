@@ -66,7 +66,7 @@ The tool is designed to handle large datasets efficiently by utilizing multiproc
 ## Usage  
 ### Command-Line Interface 
 ```bash
-python crispr_host_assignment.py \
+python crispr-mapper.py \
     -m <mags_dir> \
     -v <virus_path> \
     -o <out_dir> \
@@ -78,7 +78,7 @@ python crispr_host_assignment.py \
 ```
 ### Example
 ```bash
-python crispr_host_assignment.py \
+python crispr-mapper.py \
     -m /path/to/mags \
     -v /path/to/virus_contigs.fa \
     -o /path/to/output \
@@ -116,7 +116,7 @@ The tool generates the following output files in the specified output directory 
    - ```Virus_vs_CRISPR_Spacer.shortname.blast```: BLASTn output with renamed sequence headers.
    - ```Virus_vs_CRISPR_Spacer.blast```: BLASTn output with original sequence headers.
 3. **Host Assignment Results:**
-   - Host assignment results are saved in the output directory with details of viral contigs assigned to bacterial hosts.
+   - ```host_assignments.csv```: Host assignment results are saved in the output directory with details of viral contigs assigned to bacterial hosts.
 
 
 ## Parameters
@@ -151,7 +151,7 @@ The tool generates the following output files in the specified output directory 
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU License. See the [LICENSE](LICENSE) file for details.
 
 
 ## Contact
