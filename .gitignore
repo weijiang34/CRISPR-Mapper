@@ -1,2 +1,9 @@
+# Ignore __pycache__ directories
+__pycache__/
+
+# Ignore .pyc files
+*.pyc
+
+# Ignore others
 predict_spacers.o*
 predict_spacers.pbs
