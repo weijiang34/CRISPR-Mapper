@@ -36,7 +36,7 @@ The tool is designed to handle large datasets efficiently by utilizing multiproc
 ### Prerequisites
 - Python 3.7 or higher
 - Biopython (`pip install biopython`)
-- BLAST+ (install from [NCBI](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download))
+- BLAST+ 
 - CRT (CRISPR Recognition Tool) - Ensure it is available in the `dependency` directory.
 
 ### Installation Steps
@@ -56,6 +56,10 @@ The tool is designed to handle large datasets efficiently by utilizing multiproc
 4. Test installation with: 
    ```bash
    python crispr-mapper.py --help
+   ```
+   or run a toy sample with: 
+   ```bash 
+   python crispr-mapper.py -m test_example/dereplicated_genomes -v test_example/test.fa -o test_example/out 
    ```
 
 

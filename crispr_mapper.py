@@ -20,6 +20,7 @@ def main(mags_dir, virus_path, out_dir, threads, dependency_dir, ident_threshold
     '''
     Main function to predict CRISPR spacers from bacterial MAGs and map them to viral contigs
     '''
+    logging.info(f"Running CRISPR-Mapper with: identity - {ident_threshold}, coverage - {coverage_threshold}, evalue - {eval_threshold}")
     # Convert all paths to absolute paths
     mags_dir = os.path.abspath(mags_dir)
     virus_path = os.path.abspath(virus_path)
@@ -115,11 +116,11 @@ if __name__ == '__main__':
     parser.add_argument('-m', '--mags_dir', help='Directory containing bacterial MAGs', required=True)
     parser.add_argument('-v', '--virus', help='Path to viral contigs fasta file', required=True, default='')
     parser.add_argument('-o', '--out_dir', help='Output directory', required=True)
-    parser.add_argument('-t', '--threads', type=int, help='Number of threads', default=1)
-    parser.add_argument('-d', '--dependency', help='Dependency directory where CRT exists', default='dependency/')
-    parser.add_argument('-i', '--ident', help='Identity threshold for filtering BLAST results', type=float, default=95)
-    parser.add_argument('-c', '--coverage', help='Coverage (matched length over spacer length) threshold for filtering BLAST results', type=float, default=0.90)
-    parser.add_argument('-e', '--eval', help='E-value threshold for filtering BLAST results', type=float, default=1e-5)
+    parser.add_argument('-t', '--threads', type=int, help='Default: 1, number of threads', default=1)
+    parser.add_argument('-d', '--dependency', help='Default: \'dependency/\' , dependency directory where CRT exists', default='dependency/')
+    parser.add_argument('-i', '--ident', type=float, help='Default: 95 (0-100), identity threshold for filtering BLAST results', default=95)
+    parser.add_argument('-c', '--coverage', type=float, help='Default: 0.90 (0-1), coverage (matched length over spacer length) threshold for filtering BLAST results', default=0.90)
+    parser.add_argument('-e', '--eval', type=float, help='Default: 1e-5, e-value threshold for filtering BLAST results', default=1e-5)
     args = parser.parse_args()
     
     main(args.mags_dir, args.virus, args.out_dir, args.threads, args.dependency, args.ident, args.coverage, args.eval)
